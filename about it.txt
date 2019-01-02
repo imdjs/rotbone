@@ -1,13 +1,18 @@
-ÕâÊÇÎÒµÄµÚÒ»¸ö²å¼ş for godot 3.1£¬»¹ĞèÒª¸Ä½ø¡£
-ÎÒĞ´Õâ¸ö¹¤¾ß,Ö÷ÒªÊÇÏë¼òµ¥µØĞŞ¸ÄÒ»ÏÂ´ÓÆäËüÈí¼şµ¼ÈëgodotÖĞµÄ¹Ç¼ÜµÄpose,¶ø²»ÓÃÖØ¸´µ¼Èë,µ«²Ù×÷ºÜÏñÔÚblenderÀïµ÷Õû¹Ç÷ÀµÄ¹ı³Ì.
-Õâ¸ö¹¤¾ßÊ¹ÓÃÁËgdnativeĞ´µÄ.µ«ÒÔºó¿ÉÒÔÓÃgdscriptÖØĞ´Ò»±é,Ö÷ÒªÒ²ÊÇÎªÁËÑ§Ï°ÓëÊµ¼ùgdnative.
+
+This is my first addons for godot 3.1, and it still needs improvement.
+I wrote this tool mainly to modify the pose of the skeleton witch is imported from other software don't need to import again.
+it is very similar to adjusting the skeleton in blender.
+This tool is written with gdnative, but it can be rewritten with gdscript in the future.
+to use:
+After selecting the skeleton, press the middle key to select a single bone, then click the R key and move the mouse to rotate the bone, and press Alt + R to return to zero pose of this bone.
+When R key is clicked in the rotation mode and press X or Y or Z key to limite the axis of rotation .
+
+è¿™æ˜¯æˆ‘çš„ç¬¬ä¸€ä¸ªæ’ä»¶ for godot 3.1ï¼Œè¿˜éœ€è¦æ”¹è¿›ã€‚
+æˆ‘å†™è¿™ä¸ªå·¥å…·,ä¸»è¦æ˜¯æƒ³ç®€å•åœ°ä¿®æ”¹ä¸€ä¸‹ä»å…¶å®ƒè½¯ä»¶å¯¼å…¥godotä¸­çš„éª¨æ¶çš„pose,è€Œä¸ç”¨é‡å¤å¯¼å…¥,ä½†æ“ä½œå¾ˆåƒåœ¨blenderé‡Œè°ƒæ•´éª¨éª¼çš„è¿‡ç¨‹.
+è¿™ä¸ªå·¥å…·ä½¿ç”¨äº†gdnativeå†™çš„.ä½†ä»¥åå¯ä»¥ç”¨gdscripté‡å†™ä¸€é,ä¸»è¦ä¹Ÿæ˜¯ä¸ºäº†å­¦ä¹ ä¸å®è·µgdnative.
 
 
-Ê¹ÓÃ·½·¨:
-ÔÚ³¡¾°´®Ñ¡ÖĞ¹Ç¼Ü Sceleton ºó,°´ÖĞ¼üÊÇÑ¡Ôñµ¥¸öbone È»ºóµã»÷R¼üÒ»ÏÂ²¢ÒÆ¶¯Êó±êÊÇĞı×ªbone,°´alt+r Ò»ÏÂ ÊÇ¹éÁãpose.
-µ±°´ÁËR¼ü½øÈëĞı×ª×´Ì¬Ê±ÔÙ°´ X »òY »òZ ¼üÊÇÏŞ¶¨ÖáÏòĞı×ª.	
+ä½¿ç”¨æ–¹æ³•:
+åœ¨åœºæ™¯ä¸²é€‰ä¸­éª¨æ¶ Sceleton å,æŒ‰ä¸­é”®æ˜¯é€‰æ‹©å•ä¸ªbone ç„¶åç‚¹å‡»Ré”®ä¸€ä¸‹å¹¶ç§»åŠ¨é¼ æ ‡æ˜¯æ—‹è½¬bone,æŒ‰alt+r ä¸€ä¸‹ æ˜¯å½’é›¶pose.
+å½“æŒ‰äº†Ré”®è¿›å…¥æ—‹è½¬çŠ¶æ€æ—¶å†æŒ‰ X æˆ–Y æˆ–Z é”®æ˜¯é™å®šè½´å‘æ—‹è½¬.	
 
-Ïà¹ØÌû×Ó:
-https://godotdevelopers.org/forum/discussion/20360/addons-rotbone-for-rotating-a-selected-bone-in-the-3d-viewport-like-blender-does-win-x64?new=1
-ÏÂÔØ:
-https://pan.baidu.com/s/1gRqwcoM2dkQn9njq0ftJDA
