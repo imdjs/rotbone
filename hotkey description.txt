@@ -1,0 +1,3 @@
+After selecting the skeleton, press the middle key to select a single bone, then click the R key and move the mouse to rotate the bone, and press Alt + R to return to zero pose of this bone.
+When R key is clicked in the rotation mode and press X or Y or Z key to limite the axis of rotation .
+ 

@@ -1,0 +1,13 @@
+这是我的第一个插件 for godot 3.1，还需要改进。
+我写这个工具,主要是想简单地修改一下从其它软件导入godot中的骨架的pose,而不用重复导入,但操作很像在blender里调整骨骼的过程.
+这个工具使用了gdnative写的.但以后可以用gdscript重写一遍,主要也是为了学习与实践gdnative.
+
+
+使用方法:
+在场景串选中骨架 Sceleton 后,按中键是选择单个bone 然后点击R键一下并移动鼠标是旋转bone,按alt+r 一下 是归零pose.
+当按了R键进入旋转状态时再按 X 或Y 或Z 键是限定轴向旋转.	
+
+相关帖子:
+https://godotdevelopers.org/forum/discussion/20360/addons-rotbone-for-rotating-a-selected-bone-in-the-3d-viewport-like-blender-does-win-x64?new=1
+下载:
+https://pan.baidu.com/s/1gRqwcoM2dkQn9njq0ftJDA
