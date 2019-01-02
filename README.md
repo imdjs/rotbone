@@ -1,3 +1,3 @@
 # rotbone
 rotbone
-https://i.postimg.cc/L8f8ptTV/rotbone3.gif%22%22
+<a href="https://postimg.cc/87pSdrxF" target="_blank"><img src="https://i.postimg.cc/87pSdrxF/rotbone3.gif" alt="rotbone3"/></a>
