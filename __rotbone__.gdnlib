@@ -7,7 +7,7 @@ reloadable=true
 
 [entry]
 
-Windows.64="B://main64.dll"
+Windows.64="res://main64.dll"
 
 [dependencies]
 
