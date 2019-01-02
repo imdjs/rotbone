@@ -4,7 +4,7 @@ rotbone
 
 This is my first addons for godot 3.1, and it still needs improvement.
 
-I wrote this tool mainly to modify the pose of the skeleton witch is imported from other software don't need to import again.
+I wrote this tool mainly to modify the pose of the skeleton witch is imported from other software no need to import again.
 
 it is very similar to adjusting the skeleton in blender.
 
