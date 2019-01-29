@@ -1,4 +1,33 @@
-﻿class RotateBones : public EditorPlugin
+﻿Skeleton *armG = NULL, *arm上次G = NULL;
+int i骨数G = -1, i骨数preG = -1, ξAG;
+Vector2 v2窗口G, v2鼠屏G;
+卍Vector3 丅鼠深G, 丅鼠深PreG, *Ψ丅鼠标PreG = NULL, Z轴G, 乛乛G;
+卍Vector3 镜乛boneG, 镜乛bone小G, 丅BoneG, 丅CamG;
+float 冖BoneG, 镜冖骨G, ㄥG, ㄥ小G, 冖屏幕宽G = 0;
+bool b激活插件G = false, b按下rG = false, b按下完成G = false;
+int i按下xyzG = -1;
+const Transform t0G(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0);
+Transform xform;
+Texture texIconG, texIcon2G;
+Node *node_g = NULL;
+Spatial *spatial_mouse = NULL;
+OS *osG = NULL;
+Viewport *vpG = NULL;
+CanvasItem *ciG = NULL;
+
+typedef struct symbol_bone
+{
+	int self = -1;
+	int parent = -2;
+	int child = -1;
+	float 冖 = 0.0f;
+	deque<int> child_arr;
+} symbol_bone;
+
+VECTOR(symbol_bone, VboneG);
+VECTOR(卍Vector3, V丅BoneG);
+
+class RotateBones : public EditorPlugin
 {
     GODOT_CLASS(RotateBones, EditorPlugin)
   private:
@@ -35,17 +64,17 @@
 
 void RotateBones::_register_methods()
 {
-    注册函数(RotateBones, handles);
-    注册函数(RotateBones, _enter_tree);
-    注册函数(RotateBones, _exit_tree);
-    注册函数(RotateBones, _ready);
-    注册函数(RotateBones, edit);
-    注册函数(RotateBones, forward_spatial_gui_input);
-    注册函数(RotateBones, _input);
-    注册函数(RotateBones, __on_pressed);
-    注册函数(RotateBones, __LoadDll);
-    注册函数(RotateBones, __UnloadDll);
-    注册函数(RotateBones, clear);
+    ClassDB::bind_method(D_METHOD("handles", &RotateBones::handles);
+    ClassDB::bind_method(D_METHOD("_enter_tree", &RotateBones::_enter_tree);
+    ClassDB::bind_method(D_METHOD("_exit_tree", &RotateBones::_exit_tree);
+    ClassDB::bind_method(D_METHOD("_ready", &RotateBones::_ready);
+    ClassDB::bind_method(D_METHOD("edit", &RotateBones::edit);
+    ClassDB::bind_method(D_METHOD("forward_spatial_gui_input", &RotateBones::forward_spatial_gui_input);
+    ClassDB::bind_method(D_METHOD("_input", &RotateBones::_input);
+    ClassDB::bind_method(D_METHOD("__on_pressed", &RotateBones::__on_pressed);
+    ClassDB::bind_method(D_METHOD("__LoadDll", &RotateBones::__LoadDll);
+    ClassDB::bind_method(D_METHOD("__UnloadDll", &RotateBones::__UnloadDll);
+    ClassDB::bind_method(D_METHOD("clear", &RotateBones::clear);
 }
 
 RotateBones::RotateBones()
