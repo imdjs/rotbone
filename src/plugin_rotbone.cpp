@@ -17,11 +17,11 @@ CanvasItem *ciG = NULL;
 
 typedef struct symbol_bone
 {
-	int self = -1;
-	int parent = -2;
-	int child = -1;
-	float 冖 = 0.0f;
-	deque<int> child_arr;
+    int self = -1;
+    int parent = -2;
+    int child = -1;
+    float 冖 = 0.0f;
+    deque<int> child_arr;
 } symbol_bone;
 
 VECTOR(symbol_bone, VboneG);
@@ -210,7 +210,8 @@ void RotateBones::edit()
 
 void RotateBones::_input(const InputEventKey *ie)
 {
-    if (armG == NULL) {
+    if (armG == NULL)
+    {
         return;
     }
     if (bType(ie, "InputEventKey"))
@@ -261,7 +262,9 @@ void RotateBones::_input(const InputEventKey *ie)
 void RotateBones::forward_spatial_gui_input(Camera *camera, InputEventMouseButton *ie)
 {
     if (armG == NULL)
-        return; //b激活插件G==false or
+    {
+        return;
+    }
     if (bType(ie, "InputEventMouseButton"))
     {
         if (卩按下鼠标(ie, BUTTON_MIDDLE))
@@ -287,9 +290,14 @@ void RotateBones::forward_spatial_gui_input(Camera *camera, InputEventMouseButto
                 }
             }
             if (ξAG != -1)
+            {
                 镜冖骨G = 镜乛bone小G.冖();
+            }
             else
+            {
+
                 镜冖骨G = 0;
+            }
             PRINT3("●", ξAG, ㄥ小G, armG->get_bone_name(ξAG));
             Transform t骨 = armG->get_bone_global_pose(ξAG);
             画画ig(n场景G, this, this->ig, this->sm, &卍Vector3(t骨.origin), &卍Vector3(t骨.origin - Z(t骨.basis)));
@@ -354,7 +362,10 @@ void RotateBones::forward_spatial_gui_input(Camera *camera, InputEventMouseButto
                 vΓ = -Z轴G.Γ(乛乛G)._工();
                 const float &冖A = VboneG[ξAG].冖, 冖一乛 = 乛乛G.冖();
                 if (冖一乛 < 0.008)
+                {
+
                     return;
+                }
                 float ㄥC = ㄥ厶2(冖A, 冖一乛, 乛乛G.Λ(Z轴G));
                 PRINT5("冖", ξAG, 冖A, 冖一乛, 乛乛G.Λ(Z轴G), ㄥC);
                 t骨 = t骨初始G;
@@ -375,7 +386,10 @@ void RotateBones::forward_spatial_gui_input(Camera *camera, InputEventMouseButto
                 int iLR = (乛乛G.x > 0) ? -1 : 1;
                 float 冖 = 乛乛G.冖() * iLR;
                 if (冖 == 0)
+                {
+
                     return;
+                }
                 float ㄥC = 冖 / 冖屏幕宽G * 10;
                 t骨 = armG->get_bone_global_pose(ξAG);
                 t骨.rotate_basis(Z轴G.v3(), ㄥC);
