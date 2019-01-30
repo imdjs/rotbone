@@ -1,22 +1,22 @@
-// #include <cstdio>
+﻿// #include <cstdio>
 // #include<stdio.h>
 // #define _MSC_VER  
 // #define UNICODE
+// #include<windows.h>
 
 // #include<E:\Visual Studio 2017\VC\Microsoft SDKs\Windows\v7.1A\Include\Windows.h>
 #define NOPOPUP
-#include<GodotLib.h>
-// #include<Windows.h>
 
-#include<include\include_math.h>
-// #include"test3d.cpp"
-// #include"test_Spatial.cpp"
+#include<E:\Godot\Godot_example\GDNative-demos-master\GDNative_rotbone\src_english\GodotLib\GodotLib.h>
+// #include<Windows.h>
+// #include"IMDJS.cpp"
+// #include<include\include_math.h>
+
 #include"rotbone.h"
 #include"plugin_rotbone.cpp"
-// #include"test_MeshInstance.cpp"
 
 
-EXGD  __declspec(dllexport)  godot_gdnative_init(godot_gdnative_init_options *o) {
+extern"C" void __declspec(dllexport)   __declspec(dllexport)  godot_gdnative_init(godot_gdnative_init_options *o) {
     Godot::gdnative_init(o); //printf("● gdnative_init初始化= ");
 }
 
@@ -38,40 +38,40 @@ EXGD godot_nativescript_init(void *handle)
 
 
 //====卸载自身====================================
-EXC DWORD iΔ卸载自身(PVOID param)
+/* EXC DWORD __unLoadDll(PVOID param)
     {  
-    PRINT1("iΔ卸载自身",param);
-    // MessageBox(NULL, TEXT("Press ok to unload me."),  TEXT("MsgBox in dll"), MB_OK);  
-    // FreeLibrary(hm自身G);  
-    FreeLibraryAndExitThread(hm自身G, 0); 
+    PRINT1("__unLoadDll",param);
+    // MessageBox(NULL, TEXT("Press ok To unload me."),  TEXT("MsgBox in dll"), MB_OK);  
+    // FreeLibrary(hmSelfG);  
+    FreeLibraryAndExitThread(hmSelfG, 0); 
     // oops!  
     return 0;
     }
     
-EXC __forceinline void  Δ卸载自身()
+EXC __forceinline void  _unLoadDll()
     {//PRINT1("",i引用计数G);
     // For(i引用计数G,i)
     // while(1)
         {
-        // if(hm自身G==NULL)return;
-        CloseHandle( CreateThread(NULL, 0, iΔ卸载自身, NULL, 0, NULL) ); 
-        // HANDLE hThread=CreateThread(NULL, 0, iΔ卸载自身, NULL, 0, NULL) ; CloseHandle(hThread);
+        // if(hmSelfG==NULL)return;
+        CloseHandle( CreateThread(NULL, 0, __unLoadDll, NULL, 0, NULL) ); 
+        // HANDLE hThread=CreateThread(NULL, 0, __unLoadDll, NULL, 0, NULL) ; CloseHandle(hThread);
         // cout<<"▲hThread"<<hThread<<endl;
-        // if(hm自身G==NULL)return;
+        // if(hmSelfG==NULL)return;
         }
-    }
+    } */
 
-BOOL DllMain(HINSTANCE hinstDLL, DWORD fdwReason, PVOID lpvReserved)  
+/* BOOL DllMain(HINSTANCE hinstDLL, DWORD fdwReason, PVOID lpvReserved)  
     {
     switch (fdwReason)
         {
         case  DLL_PROCESS_ATTACH:
-            {  PRINT0(▼▼ 十十 Main64.dll 已进入目标进程。); 
-            hm自身G = (HMODULE)hinstDLL;  //++i引用计数G;
+            {  PRINT0(▼▼ PulsPuls Main64.dll 已进入目标进程。); 
+            hmSelfG = (HMODULE)hinstDLL;  //++i引用计数G;
             break;
             }
         case DLL_PROCESS_DETACH:
-            {hm自身G=NULL;//i引用计数G=0;
+            {hmSelfG=NULL;//i引用计数G=0;
             PRINT0(▼▼ 一一一 Main64.dll 已从目标进程卸载);
             // ASSERT1("▼▼ 一一一 Main64.dll 已从目标进程卸载",true);
             //MessageBox( NULL, "√√DLL已从目标进程卸载。", "信息", MB_ICONINFORMATION );
@@ -86,6 +86,6 @@ BOOL DllMain(HINSTANCE hinstDLL, DWORD fdwReason, PVOID lpvReserved)
         }
     return TRUE;  
     }  
-
+ */
 
 
