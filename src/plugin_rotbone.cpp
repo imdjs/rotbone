@@ -1,31 +1,34 @@
-﻿Skeleton *armG = NULL, *arm上次G = NULL;
-int i骨数G = -1, i骨数preG = -1, ξAG;
-Vector2 v2窗口G, v2鼠屏G;
-卍Vector3 丅鼠深G, 丅鼠深PreG, *Ψ丅鼠标PreG = NULL, Z轴G, 乛乛G;
-卍Vector3 镜乛boneG, 镜乛bone小G, 丅BoneG, 丅CamG;
-float 冖BoneG, 镜冖骨G, ㄥG, ㄥ小G, 冖屏幕宽G = 0;
-bool b激活插件G = false, b按下rG = false, b按下完成G = false;
-int i按下xyzG = -1;
+
+#include<vector>
+#include<deque>
+
+Skeleton *armG = NULL, *armPreG = NULL;
+int iBoneNumG = -1, iBoneNumPreG = -1, idxAG;
+Vector2 v2WindowG, v2MouseLocG;
+_Vector3_ vMouseDepthG, vMouseDepthPreG, *vpMousePreG = NULL, ZaxisG, v3MoveG;
+_Vector3_ vCam_boneG, vCam_bone2G, vBoneLocG, vCamLocG;
+float __boneG, fCam__boneG, angleG, angle2G, __ScreenG = 0;
+bool bActivePluginG = false, bPressRG = false, bPressFinishG = false;
+int iPressXyzG = -1;
 const Transform t0G(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0);
-Transform xform;
+Transform tBoneInitG;
 Texture texIconG, texIcon2G;
-Node *node_g = NULL;
-Spatial *spatial_mouse = NULL;
+Node *nSceneG = NULL;
+Spatial *spMouseG = NULL;
 OS *osG = NULL;
 Viewport *vpG = NULL;
-CanvasItem *ciG = NULL;
+// CanvasItem *ciG = NULL;
 
 typedef struct symbol_bone
 {
-    int self = -1;
-    int parent = -2;
-    int child = -1;
-    float 冖 = 0.0f;
+    int iSelf = -1;
+    int iParent = -2;
+    int iChild = -1;
+    float len = 0.0f;
     deque<int> child_arr;
 } symbol_bone;
 
-VECTOR(symbol_bone, VboneG);
-VECTOR(卍Vector3, V丅BoneG);
+vector<symbol_bone>VboneG;vector<_Vector3_>VboneLocG;
 
 class RotateBones : public EditorPlugin
 {
@@ -52,14 +55,14 @@ class RotateBones : public EditorPlugin
         {
             osG = OS::get_singleton();
         }
-        PRINT5("□ready", osG->get_screen_count(), osG->get_current_screen(), osG->get_screen_size(osG->get_current_screen()), osG->get_real_window_size(), osG->get_window_size());
+        // PRINT5("□ready", osG->get_screen_count(), osG->get_current_screen(), osG->get_screen_size(osG->get_current_screen()), osG->get_real_window_size(), osG->get_window_size());
     }
     void _enter_tree();
     void _exit_tree();
     Skeleton *handles(Object *object);
     void forward_spatial_gui_input(Camera *camera, InputEventMouseButton *ie);
     void edit();
-    void clear() { PRINT0(〇 clear-- ------------------------); }
+    void clear() {  }
 };
 
 void RotateBones::_register_methods()
@@ -72,8 +75,8 @@ void RotateBones::_register_methods()
     ClassDB::bind_method(D_METHOD("forward_spatial_gui_input", &RotateBones::forward_spatial_gui_input);
     ClassDB::bind_method(D_METHOD("_input", &RotateBones::_input);
     ClassDB::bind_method(D_METHOD("__on_pressed", &RotateBones::__on_pressed);
-    ClassDB::bind_method(D_METHOD("__LoadDll", &RotateBones::__LoadDll);
-    ClassDB::bind_method(D_METHOD("__UnloadDll", &RotateBones::__UnloadDll);
+    // ClassDB::bind_method(D_METHOD("__LoadDll", &RotateBones::__LoadDll);
+    // ClassDB::bind_method(D_METHOD("__UnloadDll", &RotateBones::__UnloadDll);
     ClassDB::bind_method(D_METHOD("clear", &RotateBones::clear);
 }
 
@@ -83,67 +86,67 @@ RotateBones::RotateBones()
 
 void RotateBones::_enter_tree()
 {
-    b激活插件G = true;
+    bActivePluginG = true;
 }
 void RotateBones::_exit_tree()
 {
 }
 
-void RotateBones::__LoadDll()
+/* void RotateBones::__LoadDll()
 {
     PRINT0("Θ __LoadDll ");
-}
+} */
 
-bool RotateBones::__UnloadDll()
+/* bool RotateBones::__UnloadDll()
 {
     PRINT0("Θ __UnloadDll ");
-    if (hm自身G)
+    if (hmSelfG)
     {
-        PRINT2(, hm自身G, hs自身G);
-        Δ卸载自身();
+        PRINT2(, hmSelfG, hsSelfG);
+        _unLoadDll();
     }
-    return (hm自身G == NULL) ? true : false;
-}
+    return (hmSelfG == NULL) ? true : false;
+} */
 
 void RotateBones::__on_pressed(const Texture *texIconG, const Texture *texIcon2G)
 {
-    b激活插件G = !b激活插件G;
+    bActivePluginG = !bActivePluginG;
     {
         __UnloadDll();
     }
 }
 
-static __forceinline void ΔUpdatePoseΘ(卍Bone &boneA)
+static __forceinline void __UpdatePose(symbol_bone &boneA)
 {
-    for (const auto &ξ : boneA.Vξ子)
+    for (const auto &ξ : boneA.child_arr)
     {
-        V丅BoneG[ξ] = armG->get_bone_global_pose(ξ).origin;
-        ΔUpdatePoseΘ(VboneG[ξ]);
+        VboneLocG[ξ] = armG->get_bone_global_pose(ξ).origin;
+        __UpdatePose(VboneG[ξ]);
     }
 }
 
 Skeleton *RotateBones::handles(Object *object)
 {
     oAG = object;
-    PRINT2("  handles ", sType(object), nameO(object), object->get_instance_id(), oAG->has_method("get_class"), oAG->is_queued_for_deletion());
+    // PRINT2("  handles ", sType(object), nameO(object), object->get_instance_id(), oAG->has_method("get_class"), oAG->is_queued_for_deletion());
     if (oAG)
     {
-        if (n场景G == NULL)
+        if (nSceneG == NULL)
         {
-            寻根(oAG, n场景G);
-            PRINT1("罒", n场景G, (int)vpG);
+            FindRoot(oAG, nSceneG);
+            // PRINT1("罒", nSceneG, (int)vpG);
         }
         if (in(sType(oAG), {"MeshInstance", "Skeleton"}))
         {
             Transform m = cast_to<Spatial>(oAG)->get_global_transform();
-            PRINT1("", m);
+            // PRINT1("", m);
         }
         if (卩二二(sType(oAG), "Skeleton"))
         {
             armG = cast_to<Skeleton>(oAG);
             if (armG)
             {
-                PRINT1("亖", armG->get_bone_count());
+                // PRINT1("亖", armG->get_bone_count());
             }
             return armG;
         }
@@ -158,51 +161,51 @@ void RotateBones::edit()
     {
         osG = OS::get_singleton();
     }
-    PRINT5("□", osG->get_screen_count(), osG->get_current_screen(), osG->get_screen_size(osG->get_current_screen()), osG->get_real_window_size(), osG->get_window_size());
-    冖屏幕宽G = osG->get_window_size().x;
+    // PRINT5("□", osG->get_screen_count(), osG->get_current_screen(), osG->get_screen_size(osG->get_current_screen()), osG->get_real_window_size(), osG->get_window_size());
+    __ScreenG = osG->get_window_size().x;
     if (armG)
     {
-        PRINT0("■■ edit ", armG->name, armG);
-        float 冖per = 0;
+        // PRINT0("■■ edit ", armG->name, armG);
+        float __per = 0;
         int iCount = 5;
         卍Matrix4 m = armG->get_global_transform();
-        i骨数G = armG->get_bone_count();
-        PRINT2(, i骨数G, i骨数preG);
+        iBoneNumG = armG->get_bone_count();
+        // PRINT2(, iBoneNumG, iBoneNumPreG);
         {
-            arm上次G = armG;
-            V丅BoneG.resize(i骨数G);
-            i骨数preG = i骨数G;
-            VboneG.resize(i骨数G);
-            For(i骨数G, i)
+            armPreG = armG;
+            VboneLocG.resize(iBoneNumG);
+            iBoneNumPreG = iBoneNumG;
+            VboneG.resize(iBoneNumG);
+            For(iBoneNumG, i)
             {
-                V丅BoneG[i] = (m * armG->get_bone_global_pose(i)).丅();
-                VboneG[i] = 卍Bone();
-                VboneG[i].ξSelf = i;
-                VboneG[i].ξ父 = armG->get_bone_parent(i);
-                if (VboneG[i].ξ父 > -1)
+                VboneLocG[i] = (m * armG->get_bone_global_pose(i)).Loc();
+                VboneG[i] = symbol_bone();
+                VboneG[i].iSelf = i;
+                VboneG[i].iParent = armG->get_bone_parent(i);
+                if (VboneG[i].iParent > -1)
                 {
-                    卍Bone &boneP = VboneG[VboneG[i].ξ父];
-                    boneP.ξ子 = i;
-                    if (罒Vector(i, boneP.Vξ子) == false)
+                    symbol_bone &boneP = VboneG[VboneG[i].iParent];
+                    boneP.iChild = i;
+                    if (inVector(i, boneP.child_arr) == false)
                     {
-                        boneP.Vξ子.push_back(i);
+                        boneP.child_arr.push_back(i);
                     }
-                    boneP.冖 = (V丅BoneG[i] - V丅BoneG[VboneG[i].ξ父]).冖();
+                    boneP.len = (VboneLocG[i] - VboneLocG[VboneG[i].iParent]).len();
                     if (iCount > 0)
                     {
-                        冖per += boneP.冖;
+                        __per += boneP.len;
                         --iCount;
                     }
                 }
             }
-            冖BoneG = 冖per = 冖per / (5 - iCount); //PRINT1(,冖per);
-            For(i骨数G, i)
+            __boneG = __per = __per / (5 - iCount); //PRINT1(,__per);
+            For(iBoneNumG, i)
             {
-                if (VboneG[i].ξ子 == -1)
+                if (VboneG[i].iChild == -1)
                 {
-                    VboneG[i].冖 = 冖per;
+                    VboneG[i].len = __per;
                 }
-                PRINT2("无子", i, VboneG[i].冖);
+                // PRINT2("无子", i, VboneG[i].len);
             }
         }
     }
@@ -216,45 +219,45 @@ void RotateBones::_input(const InputEventKey *ie)
     }
     if (bType(ie, "InputEventKey"))
     {
-        if (卩按下键盘(ie, KEY_R))
+        if (__bPressKey(ie, KEY_R))
         {
-            b按下rG = true;
+            bPressRG = true;
         }
         else if (ie->get_scancode_with_modifiers() == 67108946)
         {
-            armG->set_bone_pose(ξAG, t0G);
-            b按下完成G = b按下rG = false;
-            i按下xyzG = -1;
-            Ψ丅鼠标PreG = NULL;
-            卍Bone &boneA = VboneG[ξAG];
-            ΔUpdatePoseΘ(boneA);
+            armG->set_bone_pose(idxAG, t0G);
+            bPressFinishG = bPressRG = false;
+            iPressXyzG = -1;
+            vpMousePreG = NULL;
+            symbol_bone &boneA = VboneG[idxAG];
+            __UpdatePose(boneA);
         }
-        if (b按下rG)
+        if (bPressRG)
         {
 
-            if (卩按下键盘(ie, KEY_X))
+            if (__bPressKey(ie, KEY_X))
             {
-                i按下xyzG = 0;
-                armG->set_bone_global_pose(ξAG, t骨初始G);
-                Z轴G = X(t骨初始G.basis);
-                丅鼠深PreG = 丅鼠深G = v2鼠屏G;
+                iPressXyzG = 0;
+                armG->set_bone_global_pose(idxAG, tBoneInitG);
+                ZaxisG = X(tBoneInitG.basis);
+                vMouseDepthPreG = vMouseDepthG = v2MouseLocG;
             }
-            else if (卩按下键盘(ie, KEY_Y))
+            else if (__bPressKey(ie, KEY_Y))
             {
-                i按下xyzG = 1;
-                armG->set_bone_global_pose(ξAG, t骨初始G);
-                Z轴G = Y(t骨初始G.basis);
-                丅鼠深PreG = 丅鼠深G = v2鼠屏G;
+                iPressXyzG = 1;
+                armG->set_bone_global_pose(idxAG, tBoneInitG);
+                ZaxisG = Y(tBoneInitG.basis);
+                vMouseDepthPreG = vMouseDepthG = v2MouseLocG;
             }
-            else if (卩按下键盘(ie, KEY_Z))
+            else if (__bPressKey(ie, KEY_Z))
             {
-                i按下xyzG = 2;
-                armG->set_bone_global_pose(ξAG, t骨初始G);
-                Z轴G = Z(t骨初始G.basis);
-                丅鼠深PreG = 丅鼠深G = v2鼠屏G;
+                iPressXyzG = 2;
+                armG->set_bone_global_pose(idxAG, tBoneInitG);
+                ZaxisG = Z(tBoneInitG.basis);
+                vMouseDepthPreG = vMouseDepthG = v2MouseLocG;
             }
-            if (i按下xyzG != -1)
-                画画ig(n场景G, this, this->ig, this->sm, &卍Vector3(t骨初始G.origin), &卍Vector3(t骨初始G.origin - Z(t骨初始G.basis)), &卍Vector3(t骨初始G.origin + Z轴G), &卍Vector3(t骨初始G.origin - Z轴G));
+            if (iPressXyzG != -1)
+                __DRAWig(nSceneG, this, this->ig, this->sm, &_Vector3_(tBoneInitG.origin), &_Vector3_(tBoneInitG.origin - Z(tBoneInitG.basis)), &_Vector3_(tBoneInitG.origin + ZaxisG), &_Vector3_(tBoneInitG.origin - ZaxisG));
         }
     }
 }
@@ -267,55 +270,54 @@ void RotateBones::forward_spatial_gui_input(Camera *camera, InputEventMouseButto
     }
     if (bType(ie, "InputEventMouseButton"))
     {
-        if (卩按下鼠标(ie, BUTTON_MIDDLE))
+        if (__bPressMouse(ie, BUTTON_MIDDLE))
         {
-            PRINT0("BUTTON_MIDDLE");
-            Vector2 v2鼠屏G = ie->get_position();
-            丅鼠深G = camera->project_ray_normal(v2鼠屏G); //PRINT1("",丅鼠深G);
-            ㄥG = 0;
-            ㄥ小G = ㄥ180;
-            ξAG = -1;
-            丅CamG = camera->get_camera_transform().origin; //卍Vector3 乛镜Z=camera->get_global_transform().basis.z;
-            For(i骨数G, i)
+            // PRINT0("BUTTON_MIDDLE");
+            Vector2 v2MouseLocG = ie->get_position();
+            vMouseDepthG = camera->project_ray_normal(v2MouseLocG); //PRINT1("",vMouseDepthG);
+            angleG = 0;
+            angle2G = ㄥ180;
+            idxAG = -1;
+            vCamLocG = camera->get_camera_transform().origin; //_Vector3_ To镜Z=camera->get_global_transform().basis.z;
+            For(iBoneNumG, i)
             {
-                丅BoneG = V丅BoneG[i];
-                镜乛boneG = 丅BoneG - 丅CamG;
-                ㄥG = 丅鼠深G.Λ(镜乛boneG);
-                if (ㄥG < ㄥ小G)
+                vBoneLocG = VboneLocG[i];
+                vCam_boneG = vBoneLocG - vCamLocG;
+                angleG = vMouseDepthG.angle(vCam_boneG);
+                if (angleG < angle2G)
                 {
-                    ㄥ小G = ㄥG;
-                    /
-                        ξAG = i;
-                    镜乛bone小G = 镜乛boneG;
+                    angle2G = angleG;
+                    idxAG = i;
+                    vCam_bone2G = vCam_boneG;
                 }
             }
-            if (ξAG != -1)
+            if (idxAG != -1)
             {
-                镜冖骨G = 镜乛bone小G.冖();
+                fCam__boneG = vCam_bone2G.len();
             }
             else
             {
 
-                镜冖骨G = 0;
+                fCam__boneG = 0;
             }
-            PRINT3("●", ξAG, ㄥ小G, armG->get_bone_name(ξAG));
-            Transform t骨 = armG->get_bone_global_pose(ξAG);
-            画画ig(n场景G, this, this->ig, this->sm, &卍Vector3(t骨.origin), &卍Vector3(t骨.origin - Z(t骨.basis)));
-            PRINT2("draw", 镜乛bone小G, (int)this->ig, nameO(this->ig));
+            // PRINT3("●", idxAG, angle2G, armG->get_bone_name(idxAG));
+            Transform tBone = armG->get_bone_global_pose(idxAG);
+            __DRAWig(nSceneG, this, this->ig, this->sm, &_Vector3_(tBone.origin), &_Vector3_(tBone.origin - Z(tBone.basis)));
+            // PRINT2("draw", vCam_bone2G, (int)this->ig, nameO(this->ig));
         }
-        else if (卩按下鼠标(ie, BUTTON_LEFT))
+        else if (__bPressMouse(ie, BUTTON_LEFT))
         {
-            b按下完成G = true;
-            PRINT1("", b按下完成G);
-            if (b按下rG && b按下完成G)
+            bPressFinishG = true;
+            // PRINT1("", bPressFinishG);
+            if (bPressRG && bPressFinishG)
             {
                 {
-                    b按下完成G = b按下rG = false;
-                    i按下xyzG = -1;
-                    Ψ丅鼠标PreG = NULL;
-                    卍Bone &boneA = VboneG[ξAG];
-                    ΔUpdatePoseΘ(boneA);
-                    PRINT1("→→→ie==", ie);
+                    bPressFinishG = bPressRG = false;
+                    iPressXyzG = -1;
+                    vpMousePreG = NULL;
+                    symbol_bone &boneA = VboneG[idxAG];
+                    __UpdatePose(boneA);
+                    // PRINT1("→→→ie==", ie);
                     return;
                 }
             }
@@ -323,78 +325,78 @@ void RotateBones::forward_spatial_gui_input(Camera *camera, InputEventMouseButto
     }
     else if (bType(ie, "InputEventMouseMotion"))
     {
-        if (b按下rG == true)
+        if (bPressRG == true)
         {
-            v2鼠屏G = ie->get_position();
-            卍Vector3 vΓ;
-            Transform t骨, t骨子;
-            if (i按下xyzG == -1)
+            v2MouseLocG = ie->get_position();
+            _Vector3_ vCross;
+            Transform tBone, tBoneChild;
+            if (iPressXyzG == -1)
             {
-                丅鼠深G = camera->project_ray_normal(v2鼠屏G);
-                丅鼠深G = 丅鼠深G._工() * 镜冖骨G + camera->get_translation();
-                if (Ψ丅鼠标PreG == NULL)
+                vMouseDepthG = camera->project_ray_normal(v2MouseLocG);
+                vMouseDepthG = vMouseDepthG._Normalize() * fCam__boneG + camera->get_translation();
+                if (vpMousePreG == NULL)
                 {
-                    丅鼠深PreG = 丅鼠深G;
-                    Ψ丅鼠标PreG = &丅鼠深PreG;
-                    t骨初始G = armG->get_bone_global_pose(ξAG);
-                    if (VboneG[ξAG].ξ子 != -1)
+                    vMouseDepthPreG = vMouseDepthG;
+                    vpMousePreG = &vMouseDepthPreG;
+                    tBoneInitG = armG->get_bone_global_pose(idxAG);
+                    if (VboneG[idxAG].iChild != -1)
                     {
-                        t骨子 = armG->get_bone_global_pose(VboneG[ξAG].ξ子);
-                        Z轴G = t骨初始G.origin - t骨子.origin;
+                        tBoneChild = armG->get_bone_global_pose(VboneG[idxAG].iChild);
+                        ZaxisG = tBoneInitG.origin - tBoneChild.origin;
                     }
                     else
                     {
-                        if (VboneG[ξAG].ξ父 != -1)
+                        if (VboneG[idxAG].iParent != -1)
                         {
-                            Z轴G = armG->get_bone_global_pose(VboneG[ξAG].ξ父).origin - t骨初始G.origin;
+                            ZaxisG = armG->get_bone_global_pose(VboneG[idxAG].iParent).origin - tBoneInitG.origin;
                         }
 
                         else
                         {
-                            Z轴G = Z(t骨子.basis) + t骨子.origin;
+                            ZaxisG = Z(tBoneChild.basis) + tBoneChild.origin;
                         }
                     }
-                    PRINT2("Z", Z轴G, VboneG[ξAG].ξ父);
+                    // PRINT2("Z", ZaxisG, VboneG[idxAG].iParent);
                     return;
                 }
-                乛乛G = 丅鼠深G - 丅鼠深PreG;
-                PRINT1("鼠", 乛乛G);
-                vΓ = -Z轴G.Γ(乛乛G)._工();
-                const float &冖A = VboneG[ξAG].冖, 冖一乛 = 乛乛G.冖();
-                if (冖一乛 < 0.008)
+                v3MoveG = vMouseDepthG - vMouseDepthPreG;
+                // PRINT1("鼠", v3MoveG);
+                vCross = -ZaxisG.cross(v3MoveG)._Normalize();
+                const float &__A = VboneG[idxAG].len, fMoveG = v3MoveG.len();
+                if (fMoveG < 0.008)
                 {
 
                     return;
                 }
-                float ㄥC = ㄥ厶2(冖A, 冖一乛, 乛乛G.Λ(Z轴G));
-                PRINT5("冖", ξAG, 冖A, 冖一乛, 乛乛G.Λ(Z轴G), ㄥC);
-                t骨 = t骨初始G;
-                t骨.rotate_basis(vΓ.v3(), ㄥC);
+                float angleC = ㄥ厶2(__A, fMoveG, v3MoveG.angle(ZaxisG));
+                // PRINT5("len", idxAG, __A, fMoveG, v3MoveG.angle(ZaxisG), angleC);
+                tBone = tBoneInitG;
+                tBone.rotate_basis(vCross.v3(), angleC);
             }
             else
             {
-                丅鼠深G = v2鼠屏G;
-                if (Ψ丅鼠标PreG == NULL)
+                vMouseDepthG = v2MouseLocG;
+                if (vpMousePreG == NULL)
                 {
-                    丅鼠深PreG = 丅鼠深G;
-                    Ψ丅鼠标PreG = &丅鼠深PreG;
+                    vMouseDepthPreG = vMouseDepthG;
+                    vpMousePreG = &vMouseDepthPreG;
 
                     return;
                 }
-                乛乛G = 丅鼠深G - 丅鼠深PreG;
-                丅鼠深PreG = 丅鼠深G;
-                int iLR = (乛乛G.x > 0) ? -1 : 1;
-                float 冖 = 乛乛G.冖() * iLR;
-                if (冖 == 0)
+                v3MoveG = vMouseDepthG - vMouseDepthPreG;
+                vMouseDepthPreG = vMouseDepthG;
+                int iLR = (v3MoveG.x > 0) ? -1 : 1;
+                float len = v3MoveG.len() * iLR;
+                if (len == 0)
                 {
 
                     return;
                 }
-                float ㄥC = 冖 / 冖屏幕宽G * 10;
-                t骨 = armG->get_bone_global_pose(ξAG);
-                t骨.rotate_basis(Z轴G.v3(), ㄥC);
+                float angleC = len / __ScreenG * 10;
+                tBone = armG->get_bone_global_pose(idxAG);
+                tBone.rotate_basis(ZaxisG.v3(), angleC);
             }
-            armG->set_bone_global_pose(ξAG, t骨);
+            armG->set_bone_global_pose(idxAG, tBone);
         }
     }
     return;
